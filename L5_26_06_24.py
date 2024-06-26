@@ -3848,17 +3848,17 @@ for dmes in range(1, 2):
              #----------------------------------------------------------------------------
              # Asignacion de la condición frontera 08/02/24 - R-ninety
              #----------------------------------------------------------------------------
-             def boundary_z(x):
+            def boundary_z(x):
                  return np.logical_and(x[2] >= 347, x[2] <= 350)
              
              # Ubicar los grados de libertad en las caras con z entre 36 y 37
-             dofs = dolfinx.fem.locate_dofs_geometrical(V, boundary_z)
+            dofs = dolfinx.fem.locate_dofs_geometrical(V, boundary_z)
              
              # Definir la condición de frontera como desplazamiento 0 en todas las direcciones
-             u_D = dolfinx.fem.Constant(mesh, PETSc.ScalarType((0, 0, 0)))
+            u_D = dolfinx.fem.Constant(mesh, PETSc.ScalarType((0, 0, 0)))
              
              # Aplicar la condición de frontera
-             bc = dolfinx.fem.dirichletbc(u_D, dofs, V)
+            bc = dolfinx.fem.dirichletbc(u_D, dofs, V)
              #----------------------------------------------------------------------------
              
              # ## Assemble and solve
@@ -3869,18 +3869,18 @@ for dmes in range(1, 2):
              # compute the matrix.
 
 
-             A = assemble_matrix(a, bcs=[bc])
-             A.assemble()
+            A = assemble_matrix(a, bcs=[bc])
+            A.assemble()
              
              # Coordenadas de los puntos donde se aplicarán las cargas puntuales
-             point_138 = np.array([17.331, 41.7339, 327.066],dtype=np.float64)
+            point_138 = np.array([17.331, 41.7339, 327.066],dtype=np.float64)
              #point_140 = np.array([19.1341, 43.7038, 327.499],dtype=np.float64)
-             point_141 = np.array([21.0877, 41.6814, 327.132],dtype=np.float64)
+            point_141 = np.array([21.0877, 41.6814, 327.132],dtype=np.float64)
 
              # Cargas en la dirección Z y X
 
 
-             def marker_138(x):
+            def marker_138(x):
                  # Asegurarse de que x se compara correctamente con las coordenadas de point_138
                  close_x = np.isclose(x[0], point_138[0], atol=atol)
                  close_y = np.isclose(x[1], point_138[1], atol=atol)
@@ -3893,7 +3893,7 @@ for dmes in range(1, 2):
              #     close_y = np.isclose(x[1], point_140[1], atol=atol)
              #     close_z = np.isclose(x[2], point_140[2], atol=atol)
              #     return np.logical_and(np.logical_and(close_x, close_y), close_z)
-             def marker_141(x):
+            def marker_141(x):
                  # Asegurarse de que x se compara correctamente con las coordenadas de point_138
                  close_x = np.isclose(x[0], point_141[0], atol=atol)
                  close_y = np.isclose(x[1], point_141[1], atol=atol)
@@ -3902,30 +3902,30 @@ for dmes in range(1, 2):
 
 
 
-             b = assemble_vector(L)
+            b = assemble_vector(L)
 
 
 
-             vertices_138 = locate_dofs_geometrical(V, marker_138)
-             dofs_138_x = (vertices_138[0])*3 + 0  # Grado de libertad en la dirección y
-             dofs_138_z = (vertices_138[0])*3 + 2  # Grado de libertad en la dirección z
+            vertices_138 = locate_dofs_geometrical(V, marker_138)
+            dofs_138_x = (vertices_138[0])*3 + 0  # Grado de libertad en la dirección y
+            dofs_138_z = (vertices_138[0])*3 + 2  # Grado de libertad en la dirección z
 
              # vertices_140 = locate_dofs_geometrical(V, marker_140)
              # dofs_140_x = (vertices_140[0])*3 + 0  # Grado de libertad en la dirección y
              # dofs_140_z = (vertices_140[0])*3 + 2  # Grado de libertad en la dirección z
 
-             vertices_141 = locate_dofs_geometrical(V, marker_141)
-             dofs_141_x = (vertices_141[0])*3 + 0  # Grado de libertad en la dirección y
-             dofs_141_z = (vertices_141[0])*3 + 2  # Grado de libertad en la dirección z
+            vertices_141 = locate_dofs_geometrical(V, marker_141)
+            dofs_141_x = (vertices_141[0])*3 + 0  # Grado de libertad en la dirección y
+            dofs_141_z = (vertices_141[0])*3 + 2  # Grado de libertad en la dirección z
 
 
              #print("El valor de los DOFs en X y en Z en la  carga:", dofs_138_x, dofs_138_z)
              # Magnitudes de las cargas puntuales
-             P_x = 0  # Carga en la dirección y 
-             P_z = -2317   # Carga en la dirección z
-             P_z2= 0       # Carga del abductor en z
+            P_x = 0  # Carga en la dirección y 
+            P_z = -2317   # Carga en la dirección z
+            P_z2= 0       # Carga del abductor en z
                  # Aplicar las cargas puntuales
-             with b.localForm() as loc_b:
+            with b.localForm() as loc_b:
                  loc_b.setValues(dofs_138_x, P_x)
                  loc_b.setValues(dofs_138_z, P_z)
                  # loc_b.setValues(dofs_140_x, P_x)
